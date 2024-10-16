@@ -1,0 +1,12 @@
+[submodule "contracts"]
+	path = contracts
+	url = git@github.com:CatLecter/contracts.git
+[submodule "initializer"]
+	path = initializer
+	url = git@github.com:CatLecter/initializer.git
+[submodule "bff"]
+	path = bff
+	url = git@github.com:CatLecter/bff.git
+[submodule "identity"]
+	path = identity
+	url = git@github.com:CatLecter/identity.git
