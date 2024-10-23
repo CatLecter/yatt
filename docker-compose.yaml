@@ -1,0 +1,64 @@
+services:
+  bff:
+    build:
+      context: bff
+      dockerfile: bff/deployment/Dockerfile
+    container_name: bff
+    hostname: bff
+    restart: on-failure
+    env_file:
+      - ./deployment/bff/.env
+    environment:
+      POSTGRES_URI: "postgresql://yatt-user:yatt-pass@db:5432/yatt?sslmode=disable"
+    ports:
+      - "8000:8000"
+    networks:
+      - yatt-net
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    container_name: db
+    hostname: db
+    image: postgres:17.0-alpine3.20
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: "yatt-user"
+      POSTGRES_PASSWORD: "yatt-pass"
+      POSTGRES_HOST: "127.0.0.1"
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: "yatt"
+    networks:
+      - yatt-net
+    ports:
+      - "5432:5432"
+    volumes:
+      - yatt:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U yatt-user -d yatt" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  mq:
+    container_name: mq
+    hostname: mq
+    image: nats:2.10-alpine
+    restart: unless-stopped
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    command: [ "--jetstream", "--http_port", "8222", "--auth", "UfmrJOYwYCCsgQvxvcfJ3BdI6c8WBbnD" ]
+    networks:
+      - yatt-net
+
+volumes:
+  yatt:
+
+networks:
+  yatt-net:
+    name: yatt-net
+    driver: bridge
