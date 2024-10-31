@@ -1,8 +1,13 @@
 package grpcapp
 
 import (
+	"context"
 	"fmt"
-	usergrpc "github.com/CatLecter/yatt/internal/presentation/iaa/grpc/user"
+	iaaconfig "github.com/CatLecter/yatt/internal/config/iaa"
+	"github.com/CatLecter/yatt/internal/database"
+	repository "github.com/CatLecter/yatt/internal/infrastructure/repositories/iaa"
+	usergrpc "github.com/CatLecter/yatt/internal/presentation/iaa/grpc"
+	service "github.com/CatLecter/yatt/internal/services/iaa"
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
 	"net"
@@ -14,13 +19,23 @@ type App struct {
 	port       int
 }
 
-func New(log *zerolog.Logger, port int) *App {
+func New(ctx *context.Context, log *zerolog.Logger, config *iaaconfig.Config) *App {
 	gRPCServer := grpc.NewServer()
-	usergrpc.NewUserServer(gRPCServer)
+	db := database.MustNew(
+		*ctx,
+		config.Storage.URI,
+		config.Storage.MaxConnections,
+		config.Storage.MinConnections,
+		config.Storage.MaxConnLifetime,
+		config.Storage.MaxConnIdleTime,
+	)
+	userStorage := repository.NewUserRepository(log, db)
+	userService := service.New(log, userStorage)
+	usergrpc.New(gRPCServer, userService)
 	return &App{
 		log:        log,
 		gRPCServer: gRPCServer,
-		port:       port,
+		port:       config.App.Port,
 	}
 }
 

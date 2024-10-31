@@ -1,0 +1,11 @@
+app:
+  host: "127.0.0.1"
+  port: 8000
+  read_timeout: 300ms
+  write_timeout: 300ms
+  allow_origins: "*"
+  stop_timeout: 3s
+iaa:
+  uri: "127.0.0.1:5080"
+  retries: 3
+  retry_timeout: 300ms

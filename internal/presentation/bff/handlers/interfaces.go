@@ -1,15 +1,15 @@
 package handlers
 
 import (
-	"github.com/CatLecter/yatt/internal/services"
+	grpcclient "github.com/CatLecter/yatt/internal/infrastructure/clients/bff/grpc"
 	"github.com/rs/zerolog"
 )
 
 type Handler struct {
-	service *services.Service
-	log     *zerolog.Logger
+	client *grpcclient.Client
+	log    *zerolog.Logger
 }
 
-func New(service *services.Service, log *zerolog.Logger) *Handler {
-	return &Handler{service: service, log: log}
+func New(client *grpcclient.Client, log *zerolog.Logger) *Handler {
+	return &Handler{client: client, log: log}
 }

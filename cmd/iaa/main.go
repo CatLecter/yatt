@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	"github.com/CatLecter/yatt/internal/application/iaa"
+	app "github.com/CatLecter/yatt/internal/application/iaa"
+	iaaconfig "github.com/CatLecter/yatt/internal/config/iaa"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/pkgerrors"
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 )
 
 func main() {
@@ -18,28 +18,25 @@ func main() {
 
 	log := zerolog.New(os.Stdout).With().Timestamp().Logger()
 
-	app := iaa.New(
-		&log,
-		5080,
-		"postgresql://admin:admin@127.0.0.1:5432/db?sslmode=disable",
-		600,
-	)
+	config := iaaconfig.MustNew()
 
-	go app.GRPCSrv.MustRun()
-
-	stop := make(chan os.Signal, 1)
-
-	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
-
-	sgn := <-stop
-
-	log.Info().Msgf("Received signal: %s", sgn.String())
-
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), config.App.StopTimeout)
 
 	defer cancel()
 
-	app.GRPCSrv.Stop()
+	a := app.New(&ctx, &log, config)
+
+	go a.GRPCSrv.MustRun()
+
+	stopCh := make(chan os.Signal, 1)
+
+	signal.Notify(stopCh, syscall.SIGTERM, syscall.SIGINT)
+
+	stopSignal := <-stopCh
+
+	log.Info().Msgf("Received signal: %s", stopSignal.String())
+
+	a.GRPCSrv.Stop()
 
 	select {
 	case <-ctx.Done():

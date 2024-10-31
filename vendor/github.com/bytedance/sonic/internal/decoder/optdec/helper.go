@@ -8,6 +8,7 @@ import (
 	"github.com/bytedance/sonic/internal/native/types"
 )
 
+
 func SkipNumberFast(json string, start int) (int, error) {
 	// find the number ending, we pasred in sonic-cpp, it alway valid
 	pos := start

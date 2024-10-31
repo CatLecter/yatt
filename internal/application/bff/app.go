@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/CatLecter/yatt/docs"
+	docs "github.com/CatLecter/yatt/api/v1/swagger"
 	"github.com/CatLecter/yatt/internal/presentation/bff/handlers"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -12,6 +12,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -20,14 +21,22 @@ type App struct {
 	log    *zerolog.Logger
 }
 
-func New(handler *handlers.Handler, log *zerolog.Logger, host string, port string) *App {
+func New(
+	handler *handlers.Handler,
+	log *zerolog.Logger,
+	host string,
+	port int,
+	readTimeout time.Duration,
+	writeTimeout time.Duration,
+	allowOrigins string,
+) *App {
 
 	engine := gin.New()
 
 	engine.Use(
 		cors.New(
 			cors.Config{
-				AllowOrigins:     []string{"*"},
+				AllowOrigins:     strings.Split(allowOrigins, ";"),
 				AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE"},
 				AllowHeaders:     []string{"Origin", "Content-type", "Authorization"},
 				AllowCredentials: true,
@@ -55,29 +64,30 @@ func New(handler *handlers.Handler, log *zerolog.Logger, host string, port strin
 
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	v1 := engine.Group("/api/v1")
+	v1 := engine.Group("/v1")
+
 	auth := v1.Group("/auth")
 	{
 		auth.POST("/register", handler.Register)
 		auth.POST("/login", handler.Login)
 
 	}
+
 	user := v1.Group("/user")
 	{
 		user.POST("/", handler.Create)
 		user.GET("/:user_id", handler.Get)
 		user.PUT("/:user_id", handler.Update)
 		user.DELETE("/:user_id", handler.Delete)
-		//}
 
 		return &App{
 			log: log,
 			server: &http.Server{
-				Addr:           host + ":" + port,
+				Addr:           fmt.Sprintf("%s:%v", host, port),
 				Handler:        engine,
 				MaxHeaderBytes: http.DefaultMaxHeaderBytes,
-				ReadTimeout:    300 * time.Millisecond,
-				WriteTimeout:   300 * time.Millisecond,
+				ReadTimeout:    readTimeout,
+				WriteTimeout:   writeTimeout,
 			},
 		}
 	}

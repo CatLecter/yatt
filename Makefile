@@ -1,8 +1,8 @@
 gen-proto:
-	protoc api/proto/v1/* --go_out=./pkg/gen/go/ --go-grpc_out=./pkg/gen/go/
+	protoc api/v1/proto/* --go_out=./pkg/gen/go/ --go-grpc_out=./pkg/gen/go/
 
-gen-docs:
-	swag init -g cmd/bff/main.go
+gen-swag:
+	swag init -g ./cmd/bff/main.go -o api/v1/swagger
 
 build-bff:
 	go build -o ./build/bff ./cmd/bff/main.go
