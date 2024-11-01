@@ -2,13 +2,13 @@ package service
 
 import (
 	"context"
-	domainUser "github.com/CatLecter/yatt/internal/domain/user"
-	repository "github.com/CatLecter/yatt/internal/infrastructure/repositories/iaa"
-	"github.com/CatLecter/yatt/internal/lib"
-	userv1 "github.com/CatLecter/yatt/pkg/gen/go/v1/user"
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	domainUser "yatt/internal/domain/user"
+	repository "yatt/internal/infrastructure/repositories/iaa"
+	"yatt/internal/lib"
+	userv1 "yatt/pkg/gen/go/v1/user"
 )
 
 type UserService struct {

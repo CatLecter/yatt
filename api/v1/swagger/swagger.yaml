@@ -1,12 +1,29 @@
 definitions:
-  common.HTTPError:
+  dto.CreateUserRequest:
     properties:
-      msg:
+      confirm_password:
+        example: scrubs
         type: string
-      result:
+      email:
+        example: j.dorian@example.com
         type: string
+      full_name:
+        example: John Dorian
+        type: string
+      password:
+        example: scrubs
+        type: string
+      username:
+        example: JD
+        type: string
+    required:
+    - confirm_password
+    - email
+    - full_name
+    - password
+    - username
     type: object
-  schemes.LoginRequest:
+  dto.LoginRequest:
     properties:
       password:
         example: password
@@ -18,76 +35,63 @@ definitions:
     - password
     - username
     type: object
-  schemes.LoginResponse:
+  dto.LoginResponse:
     properties:
       access_token:
         example: access_token
         type: string
     type: object
-  schemes.RegisterUserRequest:
+  dto.UpdateUserRequest:
     properties:
-      confirm_password:
-        example: password
-        type: string
+      custom_fields:
+        additionalProperties:
+          type: string
+        example:
+          key: value
+        type: object
       email:
-        example: john@example.com
+        example: j.dorian@example.com
         type: string
-      password:
-        example: password
+      full_name:
+        example: John Dorian
+        type: string
+      user_id:
+        example: 3a282222-2100-4ff7-9849-71b853da0926
         type: string
       username:
-        example: John Doe
+        example: JD
         type: string
-    required:
-    - confirm_password
-    - email
-    - password
-    - username
     type: object
-  schemes.RegisterUserResponse:
+  dto.UserBriefResponse:
     properties:
       user_id:
         example: 3a282222-2100-4ff7-9849-71b853da0926
         type: string
     type: object
-  schemes.UserBriefResponse:
+  dto.UserResponse:
     properties:
-      user_id:
-        example: 3a282222-2100-4ff7-9849-71b853da0926
-        type: string
-    type: object
-  schemes.UserRequest:
-    properties:
-      confirm_password:
-        example: password
-        type: string
-      email:
-        example: john@example.com
-        type: string
-      password:
-        example: password
-        type: string
-      username:
-        example: John Doe
-        type: string
-    required:
-    - confirm_password
-    - email
-    - password
-    - username
-    type: object
-  schemes.UserResponse:
-    properties:
+      active:
+        example: true
+        type: boolean
       created_at:
         example: "2020-12-31T23:59:59Z"
         type: string
+      custom_fields:
+        additionalProperties:
+          type: string
+        example:
+          key: value
+        type: object
       email:
-        example: john@example.com
+        example: j.dorian@example.com
         type: string
-      is_active:
-        example: true
+      full_name:
+        example: John Dorian
+        type: string
+      hidden:
+        example: false
         type: boolean
-      last_login_date:
+      last_login:
         example: "2020-12-31T23:59:59Z"
         type: string
       updated_at:
@@ -97,7 +101,14 @@ definitions:
         example: 3a282222-2100-4ff7-9849-71b853da0926
         type: string
       username:
-        example: John Doe
+        example: JD
+        type: string
+    type: object
+  lib.HTTPError:
+    properties:
+      msg:
+        type: string
+      result:
         type: string
     type: object
 info:
@@ -112,75 +123,35 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/schemes.LoginRequest'
+          $ref: '#/definitions/dto.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/schemes.LoginResponse'
+            $ref: '#/definitions/dto.LoginResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
       summary: User login to the system
-      tags:
-      - Auth
-  /v1/auth/register:
-    post:
-      description: Registering a new user
-      parameters:
-      - description: User
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/schemes.RegisterUserRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/schemes.RegisterUserResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.HTTPError'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/common.HTTPError'
-        "422":
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/common.HTTPError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.HTTPError'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/common.HTTPError'
-      summary: Registering a new user
       tags:
       - Auth
   /v1/user:
@@ -192,76 +163,38 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/schemes.UserRequest'
+          $ref: '#/definitions/dto.CreateUserRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/schemes.UserResponse'
+            $ref: '#/definitions/dto.UserBriefResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
       summary: Creating a new user
       tags:
       - User
   /v1/user/{user_id}:
-    delete:
-      description: Delete user by ID
-      parameters:
-      - description: User ID
-        in: path
-        name: user_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/schemes.UserBriefResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.HTTPError'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/common.HTTPError'
-        "422":
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/common.HTTPError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.HTTPError'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/common.HTTPError'
-      summary: Delete user by ID
-      tags:
-      - User
     get:
       description: Get user by ID
       parameters:
@@ -276,27 +209,27 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/schemes.UserResponse'
+            $ref: '#/definitions/dto.UserResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
       summary: Get user by ID
       tags:
       - User
@@ -313,34 +246,34 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/schemes.UserRequest'
+          $ref: '#/definitions/dto.UpdateUserRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/schemes.UserResponse'
+            $ref: '#/definitions/dto.UserResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/common.HTTPError'
+            $ref: '#/definitions/lib.HTTPError'
       summary: Updating user data
       tags:
       - User

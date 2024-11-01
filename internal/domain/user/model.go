@@ -1,10 +1,12 @@
 package domain
 
 import (
+	"sync"
 	"time"
 )
 
 type UserModel struct {
+	Mu           sync.RWMutex
 	ID           string
 	UserName     string
 	FullName     string

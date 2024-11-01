@@ -3,14 +3,14 @@ package grpcapp
 import (
 	"context"
 	"fmt"
-	iaaconfig "github.com/CatLecter/yatt/internal/config/iaa"
-	"github.com/CatLecter/yatt/internal/database"
-	repository "github.com/CatLecter/yatt/internal/infrastructure/repositories/iaa"
-	usergrpc "github.com/CatLecter/yatt/internal/presentation/iaa/grpc"
-	service "github.com/CatLecter/yatt/internal/services/iaa"
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
 	"net"
+	iaaconfig "yatt/internal/config/iaa"
+	"yatt/internal/database"
+	repository "yatt/internal/infrastructure/repositories/iaa"
+	usergrpc "yatt/internal/presentation/iaa/grpc"
+	service "yatt/internal/services/iaa"
 )
 
 type App struct {
@@ -29,8 +29,8 @@ func New(ctx *context.Context, log *zerolog.Logger, config *iaaconfig.Config) *A
 		config.Storage.MaxConnLifetime,
 		config.Storage.MaxConnIdleTime,
 	)
-	userStorage := repository.NewUserRepository(log, db)
-	userService := service.New(log, userStorage)
+	repo := repository.New(db, log)
+	userService := service.New(log, repo.UserStorage)
 	usergrpc.New(gRPCServer, userService)
 	return &App{
 		log:        log,

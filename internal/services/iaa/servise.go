@@ -1,8 +1,8 @@
 package service
 
 import (
-	repository "github.com/CatLecter/yatt/internal/infrastructure/repositories/iaa"
 	"github.com/rs/zerolog"
+	repository "yatt/internal/infrastructure/repositories/iaa"
 )
 
 type Service struct {

@@ -32,7 +32,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schemes.LoginRequest"
+                            "$ref": "#/definitions/dto.LoginRequest"
                         }
                     }
                 ],
@@ -40,98 +40,37 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/schemes.LoginResponse"
+                            "$ref": "#/definitions/dto.LoginResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/auth/register": {
-            "post": {
-                "description": "Registering a new user",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Registering a new user",
-                "parameters": [
-                    {
-                        "description": "User",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schemes.RegisterUserRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/schemes.RegisterUserResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     }
                 }
@@ -154,7 +93,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schemes.UserRequest"
+                            "$ref": "#/definitions/dto.CreateUserRequest"
                         }
                     }
                 ],
@@ -162,37 +101,37 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/schemes.UserResponse"
+                            "$ref": "#/definitions/dto.UserBriefResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     }
                 }
@@ -221,37 +160,37 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/schemes.UserResponse"
+                            "$ref": "#/definitions/dto.UserResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     }
                 }
@@ -279,7 +218,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schemes.UserRequest"
+                            "$ref": "#/definitions/dto.UpdateUserRequest"
                         }
                     }
                 ],
@@ -287,94 +226,37 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/schemes.UserResponse"
+                            "$ref": "#/definitions/dto.UserResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Delete user by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Delete user by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/schemes.UserBriefResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/common.HTTPError"
+                            "$ref": "#/definitions/lib.HTTPError"
                         }
                     }
                 }
@@ -382,18 +264,39 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "common.HTTPError": {
+        "dto.CreateUserRequest": {
             "type": "object",
+            "required": [
+                "confirm_password",
+                "email",
+                "full_name",
+                "password",
+                "username"
+            ],
             "properties": {
-                "msg": {
-                    "type": "string"
+                "confirm_password": {
+                    "type": "string",
+                    "example": "scrubs"
                 },
-                "result": {
-                    "type": "string"
+                "email": {
+                    "type": "string",
+                    "example": "j.dorian@example.com"
+                },
+                "full_name": {
+                    "type": "string",
+                    "example": "John Dorian"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "scrubs"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "JD"
                 }
             }
         },
-        "schemes.LoginRequest": {
+        "dto.LoginRequest": {
             "type": "object",
             "required": [
                 "password",
@@ -410,7 +313,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schemes.LoginResponse": {
+        "dto.LoginResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
@@ -419,34 +322,37 @@ const docTemplate = `{
                 }
             }
         },
-        "schemes.RegisterUserRequest": {
+        "dto.UpdateUserRequest": {
             "type": "object",
-            "required": [
-                "confirm_password",
-                "email",
-                "password",
-                "username"
-            ],
             "properties": {
-                "confirm_password": {
-                    "type": "string",
-                    "example": "password"
+                "custom_fields": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "example": {
+                        "key": "value"
+                    }
                 },
                 "email": {
                     "type": "string",
-                    "example": "john@example.com"
+                    "example": "j.dorian@example.com"
                 },
-                "password": {
+                "full_name": {
                     "type": "string",
-                    "example": "password"
+                    "example": "John Dorian"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "3a282222-2100-4ff7-9849-71b853da0926"
                 },
                 "username": {
                     "type": "string",
-                    "example": "John Doe"
+                    "example": "JD"
                 }
             }
         },
-        "schemes.RegisterUserResponse": {
+        "dto.UserBriefResponse": {
             "type": "object",
             "properties": {
                 "user_id": {
@@ -455,58 +361,39 @@ const docTemplate = `{
                 }
             }
         },
-        "schemes.UserBriefResponse": {
+        "dto.UserResponse": {
             "type": "object",
             "properties": {
-                "user_id": {
-                    "type": "string",
-                    "example": "3a282222-2100-4ff7-9849-71b853da0926"
-                }
-            }
-        },
-        "schemes.UserRequest": {
-            "type": "object",
-            "required": [
-                "confirm_password",
-                "email",
-                "password",
-                "username"
-            ],
-            "properties": {
-                "confirm_password": {
-                    "type": "string",
-                    "example": "password"
+                "active": {
+                    "type": "boolean",
+                    "example": true
                 },
-                "email": {
-                    "type": "string",
-                    "example": "john@example.com"
-                },
-                "password": {
-                    "type": "string",
-                    "example": "password"
-                },
-                "username": {
-                    "type": "string",
-                    "example": "John Doe"
-                }
-            }
-        },
-        "schemes.UserResponse": {
-            "type": "object",
-            "properties": {
                 "created_at": {
                     "type": "string",
                     "example": "2020-12-31T23:59:59Z"
                 },
+                "custom_fields": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "example": {
+                        "key": "value"
+                    }
+                },
                 "email": {
                     "type": "string",
-                    "example": "john@example.com"
+                    "example": "j.dorian@example.com"
                 },
-                "is_active": {
+                "full_name": {
+                    "type": "string",
+                    "example": "John Dorian"
+                },
+                "hidden": {
                     "type": "boolean",
-                    "example": true
+                    "example": false
                 },
-                "last_login_date": {
+                "last_login": {
                     "type": "string",
                     "example": "2020-12-31T23:59:59Z"
                 },
@@ -520,7 +407,18 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string",
-                    "example": "John Doe"
+                    "example": "JD"
+                }
+            }
+        },
+        "lib.HTTPError": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "type": "string"
+                },
+                "result": {
+                    "type": "string"
                 }
             }
         }

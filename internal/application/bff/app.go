@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	docs "github.com/CatLecter/yatt/api/v1/swagger"
-	"github.com/CatLecter/yatt/internal/presentation/bff/handlers"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
@@ -14,6 +12,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	docs "yatt/api/v1/swagger"
+	"yatt/internal/presentation/bff/handlers"
 )
 
 type App struct {
@@ -68,7 +68,6 @@ func New(
 
 	auth := v1.Group("/auth")
 	{
-		auth.POST("/register", handler.Register)
 		auth.POST("/login", handler.Login)
 
 	}
@@ -78,7 +77,6 @@ func New(
 		user.POST("/", handler.Create)
 		user.GET("/:user_id", handler.Get)
 		user.PUT("/:user_id", handler.Update)
-		user.DELETE("/:user_id", handler.Delete)
 
 		return &App{
 			log: log,

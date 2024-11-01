@@ -2,9 +2,9 @@ package app
 
 import (
 	"context"
-	grpcapp "github.com/CatLecter/yatt/internal/application/iaa/grpc"
-	iaaconfig "github.com/CatLecter/yatt/internal/config/iaa"
 	"github.com/rs/zerolog"
+	grpcapp "yatt/internal/application/iaa/grpc"
+	iaaconfig "yatt/internal/config/iaa"
 )
 
 type App struct {

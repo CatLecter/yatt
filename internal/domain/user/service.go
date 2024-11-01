@@ -1,9 +1,9 @@
 package domain
 
 import (
-	"github.com/CatLecter/yatt/internal/lib"
 	"google.golang.org/grpc/codes"
 	"time"
+	"yatt/internal/lib"
 )
 
 func New() *UserModel {
@@ -15,13 +15,13 @@ func Register(username, fullName, email, password, confirmPassword string) (*Use
 	if err := user.SetUserName(username); err != nil {
 		return nil, err
 	}
-	if err := user.SetFullName(fullName); err != nil {
+	if err := user.setFullName(fullName); err != nil {
 		return nil, err
 	}
-	if err := user.SetEmail(email); err != nil {
+	if err := user.setEmail(email); err != nil {
 		return nil, err
 	}
-	if err := user.SetPassword(password, confirmPassword); err != nil {
+	if err := user.setPassword(password, confirmPassword); err != nil {
 		return nil, err
 	}
 	user.Active = true
@@ -31,6 +31,8 @@ func Register(username, fullName, email, password, confirmPassword string) (*Use
 }
 
 func (u *UserModel) SetID(id string) *lib.GRPCError {
+	u.Mu.Lock()
+	defer u.Mu.Unlock()
 	if len(id) == 0 {
 		return lib.NewGRPCError(codes.InvalidArgument, "empty user_id")
 	}
@@ -39,6 +41,8 @@ func (u *UserModel) SetID(id string) *lib.GRPCError {
 }
 
 func (u *UserModel) SetUserName(username string) *lib.GRPCError {
+	u.Mu.Lock()
+	defer u.Mu.Unlock()
 	if len(username) == 0 {
 		return lib.NewGRPCError(codes.InvalidArgument, "invalid username")
 	}
@@ -46,7 +50,7 @@ func (u *UserModel) SetUserName(username string) *lib.GRPCError {
 	return nil
 }
 
-func (u *UserModel) SetFullName(fullName string) *lib.GRPCError {
+func (u *UserModel) setFullName(fullName string) *lib.GRPCError {
 	if len(fullName) == 0 {
 		return lib.NewGRPCError(codes.InvalidArgument, "invalid full_name")
 	}
@@ -54,7 +58,7 @@ func (u *UserModel) SetFullName(fullName string) *lib.GRPCError {
 	return nil
 }
 
-func (u *UserModel) SetEmail(email string) *lib.GRPCError {
+func (u *UserModel) setEmail(email string) *lib.GRPCError {
 	if len(email) == 0 {
 		return lib.NewGRPCError(codes.InvalidArgument, "invalid email")
 	}
@@ -62,7 +66,7 @@ func (u *UserModel) SetEmail(email string) *lib.GRPCError {
 	return nil
 }
 
-func (u *UserModel) SetPassword(password, confirmPassword string) *lib.GRPCError {
+func (u *UserModel) setPassword(password, confirmPassword string) *lib.GRPCError {
 	if len(password) == 0 {
 		return lib.NewGRPCError(codes.InvalidArgument, "invalid password")
 	}
@@ -73,37 +77,23 @@ func (u *UserModel) SetPassword(password, confirmPassword string) *lib.GRPCError
 	return nil
 }
 
-func (u *UserModel) UpdateUserName(username string) {
+func (u *UserModel) SelfUpdate(username, fullName, email string, customFields map[string]string) {
+	u.Mu.Lock()
+	defer u.Mu.Unlock()
 	if len(username) != 0 {
 		u.UserName = username
 	}
-}
-
-func (u *UserModel) UpdateFullName(fullName string) {
 	if len(fullName) != 0 {
 		u.FullName = fullName
 	}
-}
-
-func (u *UserModel) UpdateEmail(email string) {
 	if len(email) != 0 {
 		u.Email = email
 	}
-}
-
-func (u *UserModel) UpdateCustomFields(customFields map[string]string) {
 	if len(customFields) != 0 {
 		for key, value := range customFields {
 			u.CustomFields[key] = value
 		}
 	}
-}
-
-func (u *UserModel) SelfUpdate(username, fullName, email string, customFields map[string]string) {
-	u.UpdateUserName(username)
-	u.UpdateFullName(fullName)
-	u.UpdateEmail(email)
-	u.UpdateCustomFields(customFields)
 }
 
 func (u *UserModel) CreateAccessToken(password string) (string, *lib.GRPCError) {

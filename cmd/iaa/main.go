@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	app "github.com/CatLecter/yatt/internal/application/iaa"
-	iaaconfig "github.com/CatLecter/yatt/internal/config/iaa"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/pkgerrors"
 	"os"
 	"os/signal"
 	"syscall"
+	app "yatt/internal/application/iaa"
+	iaaconfig "yatt/internal/config/iaa"
 )
 
 func main() {
@@ -20,9 +20,7 @@ func main() {
 
 	config := iaaconfig.MustNew()
 
-	ctx, cancel := context.WithTimeout(context.Background(), config.App.StopTimeout)
-
-	defer cancel()
+	ctx := context.Background()
 
 	a := app.New(&ctx, &log, config)
 
@@ -38,8 +36,11 @@ func main() {
 
 	a.GRPCSrv.Stop()
 
+	timeoutCtx, cancel := context.WithTimeout(context.Background(), config.App.StopTimeout)
+	defer cancel()
+
 	select {
-	case <-ctx.Done():
+	case <-timeoutCtx.Done():
 		log.Info().Msg("gRPC server stopped")
 	}
 }

@@ -6,11 +6,11 @@ import (
 )
 
 type Repository struct {
-	UserStorageInterface
+	UserStorage UserStorageInterface
 }
 
 func New(db *pgxpool.Pool, log *zerolog.Logger) *Repository {
 	return &Repository{
-		UserStorageInterface: NewUserRepository(log, db),
+		UserStorage: NewUserRepository(log, db),
 	}
 }

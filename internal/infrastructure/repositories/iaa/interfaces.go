@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	domain "github.com/CatLecter/yatt/internal/domain/user"
+	domain "yatt/internal/domain/user"
 )
 
 type UserStorageInterface interface {

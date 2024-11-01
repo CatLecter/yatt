@@ -2,15 +2,16 @@ package main
 
 import (
 	"context"
-	"github.com/CatLecter/yatt/internal/application/bff"
-	bffconfig "github.com/CatLecter/yatt/internal/config/bff"
-	iaagrpcclient "github.com/CatLecter/yatt/internal/infrastructure/clients/bff/grpc"
-	"github.com/CatLecter/yatt/internal/presentation/bff/handlers"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/pkgerrors"
 	"os"
 	"os/signal"
 	"syscall"
+	"yatt/internal/application/bff"
+	bffConfig "yatt/internal/config/bff"
+	grpcClient "yatt/internal/infrastructure/clients/bff/grpc"
+	"yatt/internal/presentation/bff/handlers"
+	service "yatt/internal/services/bff"
 )
 
 func main() {
@@ -20,17 +21,17 @@ func main() {
 
 	log := zerolog.New(os.Stdout).With().Timestamp().Logger()
 
-	config := bffconfig.MustNew()
+	config := bffConfig.MustNew()
 
-	iaaClient, err := iaagrpcclient.New(&log, config.Iaa.URI, config.Iaa.RetryTimeout, config.Iaa.Retries)
+	iaaClient, err := grpcClient.New(&log, config.Iaa.URI, config.Iaa.RetryTimeout, config.Iaa.Retries)
 
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create gRPC iaa client")
 	}
 
-	service := user.New(iaaClient, &log)
+	srv := service.New(&log, iaaClient)
 
-	handler := handlers.New(service, &log)
+	handler := handlers.New(srv, &log)
 
 	bffApp := bff.New(
 		handler,

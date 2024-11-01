@@ -3,11 +3,11 @@ package repository
 import (
 	"context"
 	"errors"
-	domainUser "github.com/CatLecter/yatt/internal/domain/user"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog"
 	"time"
+	domainUser "yatt/internal/domain/user"
 )
 
 type UserRepository struct {
@@ -29,6 +29,8 @@ func (repo *UserRepository) Save(ctx *context.Context, user *domainUser.UserMode
 	query := `INSERT INTO users.user (username, full_name, email, password, last_login) 
 			  VALUES ($1, $2, $3, $4, $5) 
 			  RETURNING *`
+	user.Mu.Lock()
+	defer user.Mu.Unlock()
 	err = conn.QueryRow(
 		*ctx, query, &user.UserName, &user.FullName, &user.Email, &user.Password, &time.Time{},
 	).Scan(
@@ -49,6 +51,8 @@ func (repo *UserRepository) GetByID(ctx *context.Context, user *domainUser.UserM
 		repo.log.Warn().Err(err).Msg("error acquiring connection")
 		return err
 	}
+	user.Mu.Lock()
+	defer user.Mu.Unlock()
 	row := conn.QueryRow(*ctx, "SELECT * FROM users.user WHERE user_id = $1", &user.ID)
 	if err := row.Scan(
 		&user.ID, &user.UserName, &user.FullName, &user.Email, &user.Password, &user.Active,
@@ -71,6 +75,8 @@ func (repo *UserRepository) GetByUserName(ctx *context.Context, user *domainUser
 		repo.log.Warn().Err(err).Msg("error acquiring connection")
 		return err
 	}
+	user.Mu.Lock()
+	defer user.Mu.Unlock()
 	row := conn.QueryRow(*ctx, "SELECT * FROM users.user WHERE username = $1", &user.UserName)
 	if err := row.Scan(
 		&user.ID, &user.UserName, &user.FullName, &user.Email, &user.Password, &user.Active,
@@ -101,6 +107,8 @@ func (repo *UserRepository) Update(ctx *context.Context, user *domainUser.UserMo
                   updated_at = current_timestamp
               WHERE user_id = $5 
               RETURNING *`
+	user.Mu.Lock()
+	defer user.Mu.Unlock()
 	err = conn.QueryRow(*ctx, query, &user.UserName, &user.FullName, &user.Email, &user.CustomFields, &user.ID).Scan(
 		&user.ID, &user.UserName, &user.FullName, &user.Email, &user.Password, &user.Active,
 		&user.Hidden, &user.LastLogin, &user.CustomFields, &user.CreatedAt, &user.UpdatedAt,

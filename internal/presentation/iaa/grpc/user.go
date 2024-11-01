@@ -2,8 +2,8 @@ package server
 
 import (
 	"context"
-	userv1 "github.com/CatLecter/yatt/pkg/gen/go/v1/user"
 	"google.golang.org/grpc/status"
+	userv1 "yatt/pkg/gen/go/v1/user"
 )
 
 func (srv *userServer) Create(ctx context.Context, req *userv1.CreateUserRequest) (*userv1.UserBriefResponse, error) {

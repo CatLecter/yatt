@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/CatLecter/yatt/internal/lib"
-	userv1 "github.com/CatLecter/yatt/pkg/gen/go/v1/user"
+	"yatt/internal/lib"
+	userv1 "yatt/pkg/gen/go/v1/user"
 )
 
 type UserServiceInterface interface {

@@ -1,9 +1,9 @@
 package server
 
 import (
-	"github.com/CatLecter/yatt/internal/services/iaa"
-	userv1 "github.com/CatLecter/yatt/pkg/gen/go/v1/user"
 	"google.golang.org/grpc"
+	"yatt/internal/services/iaa"
+	userv1 "yatt/pkg/gen/go/v1/user"
 )
 
 type userServer struct {
