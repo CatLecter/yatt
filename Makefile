@@ -10,22 +10,16 @@ build-bff:
 build-iaa:
 	go build -o ./build/iaa ./cmd/iaa/main.go
 
-build-initializer:
-	go build -o ./build/initializer ./cmd/initializer/main.go
-
 build-all:
 	go build -o ./build/bff ./cmd/bff/main.go
 	go build -o ./build/iaa ./cmd/iaa/main.go
-	go build -o ./build/initializer ./cmd/initializer/main.go
-
-run-initializer:
-	./build/initializer
 
 run-bff:
-	./build/bff
+	./build/bff --config configs/iaa/local.yaml
 
 run-iaa:
-	./build/iaa
+	docker compose up -d --build db
+	./build/iaa --config configs/iaa/local.yaml
 
 clean:
 	rm ./build/*
