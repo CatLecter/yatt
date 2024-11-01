@@ -29,8 +29,8 @@ func New(ctx *context.Context, log *zerolog.Logger, config *iaaconfig.Config) *A
 		config.Storage.MaxConnLifetime,
 		config.Storage.MaxConnIdleTime,
 	)
-	repo := repository.New(db, log)
-	userService := service.New(log, repo.UserStorage)
+	repo := repository.New(log)
+	userService := service.New(log, repo.UserStorage, db)
 	usergrpc.New(gRPCServer, userService)
 	return &App{
 		log:        log,

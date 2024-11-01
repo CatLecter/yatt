@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog"
 )
 
@@ -9,8 +8,8 @@ type Repository struct {
 	UserStorage UserStorageInterface
 }
 
-func New(db *pgxpool.Pool, log *zerolog.Logger) *Repository {
+func New(log *zerolog.Logger) *Repository {
 	return &Repository{
-		UserStorage: NewUserRepository(log, db),
+		UserStorage: NewUserRepository(log),
 	}
 }

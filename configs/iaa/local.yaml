@@ -4,8 +4,8 @@ app:
   stop_timeout: 3s
 storage:
   uri: "postgresql://admin:admin@127.0.0.1:5432/db?sslmode=disable"
-  max_connections: 15
-  min_connections: 5
+  max_connections: 150
+  min_connections: 10
   max_conn_life_time: 300ms
   max_conn_idle_time: 100ms
 auth:
