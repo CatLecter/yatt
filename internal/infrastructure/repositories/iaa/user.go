@@ -21,8 +21,6 @@ func (repo *UserRepository) Save(ctx *context.Context, tx pgx.Tx, user *domainUs
 	query := `INSERT INTO users.user (username, full_name, email, password, last_login) 
 			  VALUES ($1, $2, $3, $4, $5) 
 			  RETURNING *`
-	user.Mu.Lock()
-	defer user.Mu.Unlock()
 	row := tx.QueryRow(
 		*ctx, query, &user.UserName, &user.FullName, &user.Email, &user.Password, &time.Time{},
 	)
@@ -38,9 +36,8 @@ func (repo *UserRepository) Save(ctx *context.Context, tx pgx.Tx, user *domainUs
 }
 
 func (repo *UserRepository) GetByID(ctx *context.Context, tx pgx.Tx, user *domainUser.UserModel) error {
-	user.Mu.Lock()
-	defer user.Mu.Unlock()
-	row := tx.QueryRow(*ctx, `SELECT * FROM users.user WHERE user_id = $1`, &user.ID)
+	query := `SELECT * FROM users.user WHERE user_id = $1`
+	row := tx.QueryRow(*ctx, query, &user.ID)
 	if err := row.Scan(
 		&user.ID, &user.UserName, &user.FullName, &user.Email, &user.Password, &user.Active,
 		&user.Hidden, &user.LastLogin, &user.CustomFields, &user.CreatedAt, &user.UpdatedAt,
@@ -56,9 +53,8 @@ func (repo *UserRepository) GetByID(ctx *context.Context, tx pgx.Tx, user *domai
 }
 
 func (repo *UserRepository) GetByUserName(ctx *context.Context, tx pgx.Tx, user *domainUser.UserModel) error {
-	user.Mu.Lock()
-	defer user.Mu.Unlock()
-	row := tx.QueryRow(*ctx, `SELECT * FROM users.user WHERE username = $1`, &user.UserName)
+	query := `SELECT * FROM users.user WHERE username = $1`
+	row := tx.QueryRow(*ctx, query, &user.UserName)
 	if err := row.Scan(
 		&user.ID, &user.UserName, &user.FullName, &user.Email, &user.Password, &user.Active,
 		&user.Hidden, &user.LastLogin, &user.CustomFields, &user.CreatedAt, &user.UpdatedAt,
@@ -82,8 +78,6 @@ func (repo *UserRepository) Update(ctx *context.Context, tx pgx.Tx, user *domain
                   updated_at = current_timestamp
               WHERE user_id = $5 
               RETURNING *`
-	user.Mu.Lock()
-	defer user.Mu.Unlock()
 	err := tx.QueryRow(*ctx, query, &user.UserName, &user.FullName, &user.Email, &user.CustomFields, &user.ID).Scan(
 		&user.ID, &user.UserName, &user.FullName, &user.Email, &user.Password, &user.Active,
 		&user.Hidden, &user.LastLogin, &user.CustomFields, &user.CreatedAt, &user.UpdatedAt,
@@ -96,11 +90,8 @@ func (repo *UserRepository) Update(ctx *context.Context, tx pgx.Tx, user *domain
 }
 
 func (repo *UserRepository) CheckByEmail(ctx *context.Context, tx pgx.Tx, email string) (bool, error) {
-	row := tx.QueryRow(
-		*ctx,
-		`SELECT CASE WHEN EXISTS (SELECT user_id FROM users.user WHERE email = $1) THEN true ELSE false END`,
-		&email,
-	)
+	query := `SELECT CASE WHEN EXISTS (SELECT user_id FROM users.user WHERE email = $1) THEN true ELSE false END`
+	row := tx.QueryRow(*ctx, query, &email)
 	var result bool
 	err := row.Scan(&result)
 	if err != nil {
@@ -111,11 +102,8 @@ func (repo *UserRepository) CheckByEmail(ctx *context.Context, tx pgx.Tx, email 
 }
 
 func (repo *UserRepository) CheckByUserName(ctx *context.Context, tx pgx.Tx, username string) (bool, error) {
-	row := tx.QueryRow(
-		*ctx,
-		`SELECT CASE WHEN EXISTS (SELECT user_id FROM users.user WHERE username = $1) THEN true ELSE false END`,
-		&username,
-	)
+	query := `SELECT CASE WHEN EXISTS (SELECT user_id FROM users.user WHERE username = $1) THEN true ELSE false END`
+	row := tx.QueryRow(*ctx, query, &username)
 	var result bool
 	err := row.Scan(&result)
 	if err != nil {

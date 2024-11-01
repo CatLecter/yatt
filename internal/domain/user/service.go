@@ -31,8 +31,6 @@ func Register(username, fullName, email, password, confirmPassword string) (*Use
 }
 
 func (u *UserModel) SetID(id string) *lib.GRPCError {
-	u.Mu.Lock()
-	defer u.Mu.Unlock()
 	if len(id) == 0 {
 		return lib.NewGRPCError(codes.InvalidArgument, "empty user_id")
 	}
@@ -41,8 +39,6 @@ func (u *UserModel) SetID(id string) *lib.GRPCError {
 }
 
 func (u *UserModel) SetUserName(username string) *lib.GRPCError {
-	u.Mu.Lock()
-	defer u.Mu.Unlock()
 	if len(username) == 0 {
 		return lib.NewGRPCError(codes.InvalidArgument, "invalid username")
 	}
@@ -78,8 +74,6 @@ func (u *UserModel) setPassword(password, confirmPassword string) *lib.GRPCError
 }
 
 func (u *UserModel) SelfUpdate(username, fullName, email string, customFields map[string]string) {
-	u.Mu.Lock()
-	defer u.Mu.Unlock()
 	if len(username) != 0 {
 		u.UserName = username
 	}
