@@ -1,3 +1,4 @@
+//go:build go1.16 && !go1.21
 // +build go1.16,!go1.21
 
 /*
@@ -19,7 +20,7 @@
 package rt
 
 import (
-    _ `unsafe`
+	_ "unsafe"
 )
 
 //go:linkname GcWriteBarrierAX runtime.gcWriteBarrier

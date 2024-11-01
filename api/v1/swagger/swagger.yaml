@@ -26,10 +26,10 @@ definitions:
   dto.LoginRequest:
     properties:
       password:
-        example: password
+        example: scrubs
         type: string
       username:
-        example: John Doe
+        example: JD
         type: string
     required:
     - password
@@ -54,9 +54,6 @@ definitions:
         type: string
       full_name:
         example: John Dorian
-        type: string
-      user_id:
-        example: 3a282222-2100-4ff7-9849-71b853da0926
         type: string
       username:
         example: JD

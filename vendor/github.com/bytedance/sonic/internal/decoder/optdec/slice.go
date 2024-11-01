@@ -51,7 +51,7 @@ type arrayDecoder struct {
 	len      int
 	elemType *rt.GoType
 	elemDec  decFunc
-	typ   	reflect.Type
+	typ      reflect.Type
 }
 
 //go:nocheckptr
@@ -179,7 +179,7 @@ func (d *sliceBytesDecoder) FromDom(vp unsafe.Pointer, node Node, ctx *context) 
 type sliceBytesUnmarshalerDecoder struct {
 	elemType *rt.GoType
 	elemDec  decFunc
-	typ reflect.Type
+	typ      reflect.Type
 }
 
 func (d *sliceBytesUnmarshalerDecoder) FromDom(vp unsafe.Pointer, node Node, ctx *context) error {

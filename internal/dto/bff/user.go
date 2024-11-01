@@ -23,7 +23,6 @@ type LoginRequest struct {
 }
 
 type UpdateUserRequest struct {
-	UserID       uuid.UUID         `json:"user_id" example:"3a282222-2100-4ff7-9849-71b853da0926"`
 	UserName     string            `json:"username" example:"JD"`
 	FullName     string            `json:"full_name" example:"John Dorian"`
 	Email        string            `json:"email" example:"j.dorian@example.com"`

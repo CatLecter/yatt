@@ -96,5 +96,6 @@ func (s *UserService) Login(ctx *context.Context, req *userv1.LoginRequest) (*us
 	if err != nil {
 		return nil, err
 	}
+	// TODO: реализовать обновление поля last_login пользователя
 	return &userv1.LoginResponse{AccessToken: accessToken}, nil
 }

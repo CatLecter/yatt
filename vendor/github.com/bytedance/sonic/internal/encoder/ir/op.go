@@ -225,7 +225,7 @@ func NewInsVt(op Op, vt reflect.Type) Instr {
 }
 
 type typAndTab struct {
-	vt *rt.GoType
+	vt   *rt.GoType
 	itab *rt.GoItab
 }
 
@@ -233,7 +233,7 @@ func NewInsVtab(op Op, vt reflect.Type, itab *rt.GoItab) Instr {
 	return Instr{
 		o: op,
 		p: unsafe.Pointer(&typAndTab{
-			vt: rt.UnpackType(vt),
+			vt:   rt.UnpackType(vt),
 			itab: itab,
 		}),
 	}
@@ -381,7 +381,7 @@ func (self Instr) Disassemble() string {
 	case OP_slice_next:
 		return fmt.Sprintf("%-18sL_%d, %s", self.Op().String(), self.Vi(), self.Vt())
 	default:
-		return fmt.Sprintf("%#v", self) 
+		return fmt.Sprintf("%#v", self)
 	}
 }
 

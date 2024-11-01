@@ -305,11 +305,11 @@ const docTemplate = `{
             "properties": {
                 "password": {
                     "type": "string",
-                    "example": "password"
+                    "example": "scrubs"
                 },
                 "username": {
                     "type": "string",
-                    "example": "John Doe"
+                    "example": "JD"
                 }
             }
         },
@@ -341,10 +341,6 @@ const docTemplate = `{
                 "full_name": {
                     "type": "string",
                     "example": "John Dorian"
-                },
-                "user_id": {
-                    "type": "string",
-                    "example": "3a282222-2100-4ff7-9849-71b853da0926"
                 },
                 "username": {
                     "type": "string",

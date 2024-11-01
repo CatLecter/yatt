@@ -1,3 +1,4 @@
+//go:build go1.17 && !go1.24
 // +build go1.17,!go1.24
 
 /*
@@ -19,20 +20,17 @@
 package api
 
 import (
-	`github.com/bytedance/sonic/internal/decoder/optdec`
-	`github.com/bytedance/sonic/internal/envs`
+	"github.com/bytedance/sonic/internal/decoder/optdec"
+	"github.com/bytedance/sonic/internal/envs"
 )
 
 var (
 	pretouchImpl = optdec.Pretouch
-	decodeImpl = optdec.Decode
+	decodeImpl   = optdec.Decode
 )
 
-
 func init() {
-    // whe in aarch64. we enable all optimize
+	// whe in aarch64. we enable all optimize
 	envs.EnableOptDec()
 	envs.EnableFastMap()
 }
-
-

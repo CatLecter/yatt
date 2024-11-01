@@ -42,7 +42,7 @@ type mapStrKeyDecoder struct {
 	mapType *rt.GoMapType
 	elemDec decFunc
 	assign  rt.MapStrAssign
-	typ 	reflect.Type
+	typ     reflect.Type
 }
 
 func (d *mapStrKeyDecoder) FromDom(vp unsafe.Pointer, node Node, ctx *context) error {
@@ -86,7 +86,7 @@ func (d *mapStrKeyDecoder) FromDom(vp unsafe.Pointer, node Node, ctx *context) e
 type mapI32KeyDecoder struct {
 	mapType *rt.GoMapType
 	elemDec decFunc
-	assign rt.Map32Assign
+	assign  rt.Map32Assign
 }
 
 func (d *mapI32KeyDecoder) FromDom(vp unsafe.Pointer, node Node, ctx *context) error {
@@ -139,7 +139,7 @@ func (d *mapI32KeyDecoder) FromDom(vp unsafe.Pointer, node Node, ctx *context) e
 type mapI64KeyDecoder struct {
 	mapType *rt.GoMapType
 	elemDec decFunc
-	assign rt.Map64Assign
+	assign  rt.Map64Assign
 }
 
 func (d *mapI64KeyDecoder) FromDom(vp unsafe.Pointer, node Node, ctx *context) error {
@@ -244,7 +244,7 @@ func (d *mapU32KeyDecoder) FromDom(vp unsafe.Pointer, node Node, ctx *context) e
 type mapU64KeyDecoder struct {
 	mapType *rt.GoMapType
 	elemDec decFunc
-	assign rt.Map64Assign
+	assign  rt.Map64Assign
 }
 
 func (d *mapU64KeyDecoder) FromDom(vp unsafe.Pointer, node Node, ctx *context) error {
@@ -255,7 +255,7 @@ func (d *mapU64KeyDecoder) FromDom(vp unsafe.Pointer, node Node, ctx *context) e
 
 	obj, ok := node.AsObj()
 	if !ok {
-		return  error_mismatch(node, ctx, d.mapType.Pack())
+		return error_mismatch(node, ctx, d.mapType.Pack())
 	}
 	// allocate map
 	m := *(*unsafe.Pointer)(vp)
@@ -390,7 +390,7 @@ func (d *mapDecoder) FromDom(vp unsafe.Pointer, node Node, ctx *context) error {
 
 	obj, ok := node.AsObj()
 	if !ok {
-		return	error_mismatch(node, ctx, d.mapType.Pack())
+		return error_mismatch(node, ctx, d.mapType.Pack())
 	}
 
 	// allocate map
